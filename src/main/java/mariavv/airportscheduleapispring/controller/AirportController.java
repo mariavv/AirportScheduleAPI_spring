@@ -1,10 +1,9 @@
 package mariavv.airportscheduleapispring.controller;
 
 import mariavv.airportscheduleapispring.domain.dto.AirportDto;
+import mariavv.airportscheduleapispring.domain.dto.AirportNameDto;
 import mariavv.airportscheduleapispring.service.AirportService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +20,15 @@ public class AirportController {
     @GetMapping("/airports")
     public List<AirportDto> getAirports() {
         return airportService.getAirports();
+    }
+
+    @GetMapping("/airport/{name}")
+    public Integer getOne(@PathVariable String name) {
+        return airportService.getAirportByName(name);
+    }
+
+    @PostMapping
+    public AirportDto create(@RequestBody AirportNameDto town) {
+        return airportService.addAirport(town);
     }
 }
