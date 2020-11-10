@@ -16,11 +16,11 @@ public class FlightEntity {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "airtort_from_id", referencedColumnName = "id")
+    @JoinColumn(name = "airport_from_id", referencedColumnName = "id")
     private AirportEntity airportFrom;
 
     @ManyToOne
-    @JoinColumn(name = "airtort_to_id", referencedColumnName = "id")
+    @JoinColumn(name = "airport_to_id", referencedColumnName = "id")
     private AirportEntity airportTo;
 
     @Future
