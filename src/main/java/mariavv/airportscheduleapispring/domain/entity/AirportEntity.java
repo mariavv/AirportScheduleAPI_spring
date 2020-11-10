@@ -9,9 +9,11 @@ import java.util.Objects;
 public class AirportEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Integer id;
 
     @Size(min=2, max=20)
+    @Column(name = "name")
     private String name;
 
     public AirportEntity() {
