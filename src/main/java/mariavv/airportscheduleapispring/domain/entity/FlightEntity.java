@@ -39,7 +39,7 @@ public class FlightEntity {
 
     @OneToOne
     @JoinColumn(name = "postponed_on_flight_id", referencedColumnName = "id")
-    private AirportEntity postponedOn;
+    private FlightEntity postponedOn;
 
     @Column(name = "is_canceled")
     private Boolean isCanceled;
@@ -75,7 +75,7 @@ public class FlightEntity {
         return delayArrival;
     }
 
-    public AirportEntity getPostponedOn() {
+    public FlightEntity getPostponedOn() {
         return postponedOn;
     }
 
@@ -107,7 +107,7 @@ public class FlightEntity {
         this.delayArrival = delayArrival;
     }
 
-    public void setPostponedOn(AirportEntity postponedOn) {
+    public void setPostponedOn(FlightEntity postponedOn) {
         this.postponedOn = postponedOn;
     }
 
