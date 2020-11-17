@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "flights")
+@Table(name = "flight")
 public class FlightEntity {
 
     @Id
@@ -37,11 +37,12 @@ public class FlightEntity {
     @Column(name = "delay_arrival")
     private LocalTime delayArrival;
 
-    @OneToOne
+    @OneToOne//(cascade = CascadeType.ALL)
     @JoinColumn(name = "postponed_on_flight_id", referencedColumnName = "id")
     private FlightEntity postponedOn;
 
     @Column(name = "is_canceled")
+    //@Enumerated(EnumType.STRING)
     private Boolean isCanceled;
 
     public FlightEntity() {
