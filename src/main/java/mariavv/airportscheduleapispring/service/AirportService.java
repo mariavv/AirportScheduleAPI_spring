@@ -7,7 +7,7 @@ import java.util.List;
 public interface AirportService {
     List<AirportDto> getAirports();
 
-    Integer getAirportByName(String name);
+    Integer getAirportIdByName(String name);
 
     AirportDto addAirport(String town);
 

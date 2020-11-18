@@ -23,7 +23,7 @@ public class AirportController {
 
     @GetMapping("/{name}")
     public Integer getOne(@PathVariable String name) {
-        return airportService.getAirportByName(name);
+        return airportService.getAirportIdByName(name);
     }
 
     @PostMapping()

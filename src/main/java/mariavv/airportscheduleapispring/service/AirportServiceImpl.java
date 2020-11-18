@@ -28,12 +28,12 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
-    public Integer getAirportByName(String name) {
-        Integer airportId = airportRepository.findIdByName(name);
-        if (airportId == null) {
+    public Integer getAirportIdByName(String name) {
+        AirportEntity airport = airportRepository.findByName(name);
+        if (airport == null) {
             throw new NotFoundException(String.format("Airport with name '%s' not found", name));
         }
-        return airportId;
+        return airport.getId();
     }
 
     @Override
