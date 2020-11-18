@@ -12,16 +12,6 @@ import java.util.List;
 public class FlightMapper implements EntityDtoMapper<FlightEntity, FlightWithIdDto> {
 
     @Override
-    public FlightEntity toEntity(FlightWithIdDto dto) {
-        return null;
-    }
-
-    @Override
-    public List<FlightEntity> toEntityList(List<FlightWithIdDto> dtoList) {
-        return null;
-    }
-
-    @Override
     public FlightWithIdDto toDto(FlightEntity entity) {
         FlightEntity postponedOn = entity.getPostponedOn();
         Integer postponedOnId;

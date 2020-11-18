@@ -14,7 +14,7 @@ import java.util.List;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @RestController
-@RequestMapping("/api/v1/flight")
+@RequestMapping("/api/v1/flights")
 public class FlightController {
 
     private final FlightService flightService;
@@ -28,7 +28,7 @@ public class FlightController {
         return flightService.getFlights();
     }
 
-    @PutMapping
+    @PostMapping
     public ResponseEntity<String> create(@RequestBody FlightDto flight) {
         if (isEmpty(flight)) {
             return ResponseEntity.badRequest().build();
@@ -41,8 +41,7 @@ public class FlightController {
         }
     }
 
-
-    @PostMapping()
+    @PutMapping()
     public ResponseEntity<String> update(@RequestParam Integer id,
                                          @RequestParam Boolean isCanceled) {
         if (isEmpty(id) || isEmpty(isCanceled)) {
@@ -54,12 +53,12 @@ public class FlightController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
         flightService.deleteFlight(id);
     }
 
-    @GetMapping("/flightsByAirportAndArrivalInterval")
+    @GetMapping("/by-airport-and-arrival")
     public ResponseEntity<List<FlightWithIdDto>> getFlightsByAirportAndArrivalInterval(@RequestBody AirportsAndArrivalInterval target) {
         if (isEmpty(target.getAirportFromId()) || isEmpty(target.getAirportToId()) ||
                 isEmpty(target.getArrivalFrom()) || isEmpty(target.getArrivalTo())) {
@@ -72,7 +71,7 @@ public class FlightController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/flightsByAirportsAndArrivalWithDelays")
+    @GetMapping("/by-airport-and-arrival-delay")
     public ResponseEntity<List<FlightWithIdDto>> getFlightsByAirportsAndArrivalWithDelays(@RequestBody AirportsAndFactArrival target) {
 
         List<FlightWithIdDto> result = flightService.getFlightsByAirportsAndArrivalWithDelays(target);

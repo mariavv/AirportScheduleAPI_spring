@@ -37,12 +37,11 @@ public class FlightEntity {
     @Column(name = "delay_arrival")
     private LocalTime delayArrival;
 
-    @OneToOne//(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "postponed_on_flight_id", referencedColumnName = "id")
     private FlightEntity postponedOn;
 
     @Column(name = "is_canceled")
-    //@Enumerated(EnumType.STRING)
     private Boolean isCanceled;
 
     public FlightEntity() {

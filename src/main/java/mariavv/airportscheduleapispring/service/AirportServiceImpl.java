@@ -1,7 +1,6 @@
 package mariavv.airportscheduleapispring.service;
 
 import mariavv.airportscheduleapispring.domain.dto.AirportDto;
-import mariavv.airportscheduleapispring.domain.dto.AirportNameDto;
 import mariavv.airportscheduleapispring.domain.entity.AirportEntity;
 import mariavv.airportscheduleapispring.exception.NotFoundException;
 import mariavv.airportscheduleapispring.repo.AirportRepository;
@@ -28,6 +27,7 @@ public class AirportServiceImpl implements AirportService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Integer getAirportByName(String name) {
         AirportEntity airport = airportRepository.findByName(name);
         if (airport == null) {
@@ -36,11 +36,17 @@ public class AirportServiceImpl implements AirportService {
         return airport.getId();
     }
 
-    public AirportDto addAirport(AirportNameDto town) {
+    @Override
+    public AirportDto addAirport(String name) {
         AirportEntity airport = new AirportEntity();
-        airport.setName(town.getName());
+        airport.setName(name);
         airportRepository.save(airport);
 
         return new AirportDto(airport.getId(), airport.getName());
+    }
+
+    @Override
+    public void deleteAirport(Integer id) {
+        airportRepository.deleteById(id);
     }
 }
