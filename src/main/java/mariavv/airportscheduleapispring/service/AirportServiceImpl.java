@@ -31,7 +31,7 @@ public class AirportServiceImpl implements AirportService {
     public Integer getAirportByName(String name) {
         AirportEntity airport = airportRepository.findByName(name);
         if (airport == null) {
-            throw new NotFoundException();
+            throw new NotFoundException(String.format("Airport with name '%s' not found", name));
         }
         return airport.getId();
     }
