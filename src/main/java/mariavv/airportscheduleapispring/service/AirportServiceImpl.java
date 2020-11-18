@@ -29,11 +29,11 @@ public class AirportServiceImpl implements AirportService {
 
     @Override
     public Integer getAirportByName(String name) {
-        AirportEntity airport = airportRepository.findByName(name);
-        if (airport == null) {
+        Integer airportId = airportRepository.findIdByName(name);
+        if (airportId == null) {
             throw new NotFoundException(String.format("Airport with name '%s' not found", name));
         }
-        return airport.getId();
+        return airportId;
     }
 
     @Override

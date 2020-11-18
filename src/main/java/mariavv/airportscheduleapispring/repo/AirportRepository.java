@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AirportRepository extends JpaRepository<AirportEntity, Integer> {
-    AirportEntity findByName(String name);
+    @Query(value = "SELECT DISTINCT a.id FROM airport a WHERE a.name = :name"
+            , nativeQuery = true)
+    Integer findIdByName(String name);
 }
