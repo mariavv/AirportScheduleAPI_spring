@@ -23,7 +23,6 @@ public class FlightServiceImpl implements FlightService {
 
     private final AirportRepository airportRepository;
     private final FlightRepository flightRepository;
-    //@Resource(name="converters")
     private final FlightMapper flightMapper;
 
     public FlightServiceImpl(AirportRepository airportRepository, FlightRepository flightRepository, FlightMapper flightMapper) {
