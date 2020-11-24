@@ -26,7 +26,7 @@ public class AirportController {
         return airportService.getAirportIdByName(name);
     }
 
-    @PostMapping()
+    @PostMapping("/{name}")
     public AirportDto create(@PathVariable String name) {
         return airportService.addAirport(name);
     }
