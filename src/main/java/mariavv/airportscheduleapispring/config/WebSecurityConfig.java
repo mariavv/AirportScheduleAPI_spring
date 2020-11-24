@@ -25,9 +25,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/v1/**").hasAnyAuthority(Permission.AIRPORT_READ.getPermission())
-                .antMatchers(HttpMethod.POST, "/api/v1/**").hasAuthority(Permission.AIRPORT_WRITE.getPermission())
-                .antMatchers(HttpMethod.DELETE, "/api/v1/**").hasAuthority(Permission.AIRPORT_WRITE.getPermission())
                 .anyRequest()
                 .authenticated()
                 .and()
