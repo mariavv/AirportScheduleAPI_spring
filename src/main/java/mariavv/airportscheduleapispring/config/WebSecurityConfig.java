@@ -1,6 +1,7 @@
 package mariavv.airportscheduleapispring.config;
 
-import mariavv.airportscheduleapispring.domain.entity.Role;
+import mariavv.airportscheduleapispring.domain.model.Permission;
+import mariavv.airportscheduleapispring.domain.model.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,8 +25,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/v1/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
-                .antMatchers(HttpMethod.POST, "/api/v1/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/api/v1/**").hasAnyAuthority(Permission.AIRPORT_READ.getPermission())
+                .antMatchers(HttpMethod.POST, "/api/v1/**").hasAuthority(Permission.AIRPORT_WRITE.getPermission())
+                .antMatchers(HttpMethod.DELETE, "/api/v1/**").hasAuthority(Permission.AIRPORT_WRITE.getPermission())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -39,13 +41,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 User.builder()
                         .username("admin")
                         .password(passwordEncoder().encode("admin"))
-                        .roles(Role.ADMIN.name())
+                        .authorities(Role.ADMIN.getAuthorities())
                         .build(),
 
                 User.builder()
                         .username("user")
                         .password(passwordEncoder().encode("user"))
-                        .roles(Role.USER.name())
+                        .authorities(Role.USER.getAuthorities())
                         .build()
         );
     }
