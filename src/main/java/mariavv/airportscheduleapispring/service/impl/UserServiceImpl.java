@@ -2,10 +2,12 @@ package mariavv.airportscheduleapispring.service.impl;
 
 import mariavv.airportscheduleapispring.domain.dto.UserDto;
 import mariavv.airportscheduleapispring.domain.entity.PermissionEntity;
+import mariavv.airportscheduleapispring.domain.entity.RoleEntity;
 import mariavv.airportscheduleapispring.domain.entity.UserEntity;
+import mariavv.airportscheduleapispring.exception.NotFoundException;
+import mariavv.airportscheduleapispring.repo.RoleRepository;
 import mariavv.airportscheduleapispring.repo.UserRepository;
 import mariavv.airportscheduleapispring.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,11 +26,12 @@ import static java.util.stream.Collectors.toSet;
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -41,10 +44,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDto addUser(String name) {
+    public UserDto addUser(String name, String password) {
         UserEntity user = new UserEntity();
         user.setName(name);
-        //todo add password
+        user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
 
         return new UserDto(user.getId(), user.getName(), null);
@@ -56,8 +59,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void changePassword(String name, String password) {
-        //todo
+    public void changePassword(String name, String oldPassword, String password) {
+        UserEntity user = userRepository.findByName(name).orElse(null);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+        if (passwordEncoder.matches(oldPassword, user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(password));
+        } else {
+            //todo PassNotMatchesEx
+            throw new NotFoundException("");
+        }
+    }
+
+    @Override
+    public boolean grantRole(Integer userId, Integer roleId) {
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            return false;
+        }
+        RoleEntity role = roleRepository.findById(roleId).orElse(null);
+        if (role == null) {
+            return false;
+        }
+        user.getRoles().add(role);
+        userRepository.save(user);
+        return true;
     }
 
     @Override
@@ -65,7 +92,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         UserEntity user = userRepository.findByName(s).orElse(null);
 
         if (user == null) {
-            throw new UsernameNotFoundException(String.format("User %s not found", s));
+            throw new UsernameNotFoundException(String.format("User '%s' not found", s));
         }
 
         Set<PermissionEntity> combined = user.getRoles()

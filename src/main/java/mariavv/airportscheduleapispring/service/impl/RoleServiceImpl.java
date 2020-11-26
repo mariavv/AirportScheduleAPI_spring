@@ -1,6 +1,7 @@
 package mariavv.airportscheduleapispring.service.impl;
 
 import mariavv.airportscheduleapispring.domain.dto.RoleDto;
+import mariavv.airportscheduleapispring.domain.entity.PermissionEntity;
 import mariavv.airportscheduleapispring.domain.entity.RoleEntity;
 import mariavv.airportscheduleapispring.repo.PermissionRepository;
 import mariavv.airportscheduleapispring.repo.RoleRepository;
@@ -50,7 +51,11 @@ public class RoleServiceImpl implements RoleService {
         if (role == null) {
             return false;
         }
-        role.getPermissions().add(permissionRepository.findById(permissionId).orElse(null));
+        PermissionEntity permission = permissionRepository.findById(permissionId).orElse(null);
+        if (permission == null) {
+            return false;
+        }
+        role.getPermissions().add(permission);
         roleRepository.save(role);
         return true;
     }
