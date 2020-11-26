@@ -1,9 +1,10 @@
-package mariavv.airportscheduleapispring.service;
+package mariavv.airportscheduleapispring.service.impl;
 
 import mariavv.airportscheduleapispring.domain.dto.AirportDto;
 import mariavv.airportscheduleapispring.domain.entity.AirportEntity;
 import mariavv.airportscheduleapispring.exception.NotFoundException;
 import mariavv.airportscheduleapispring.repo.AirportRepository;
+import mariavv.airportscheduleapispring.service.AirportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

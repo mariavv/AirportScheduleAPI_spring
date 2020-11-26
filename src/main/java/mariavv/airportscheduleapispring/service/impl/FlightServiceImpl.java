@@ -1,4 +1,4 @@
-package mariavv.airportscheduleapispring.service;
+package mariavv.airportscheduleapispring.service.impl;
 
 import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrival;
 import mariavv.airportscheduleapispring.domain.dto.FlightDto;
@@ -8,6 +8,7 @@ import mariavv.airportscheduleapispring.domain.entity.FlightEntity;
 import mariavv.airportscheduleapispring.mapper.FlightMapper;
 import mariavv.airportscheduleapispring.repo.AirportRepository;
 import mariavv.airportscheduleapispring.repo.FlightRepository;
+import mariavv.airportscheduleapispring.service.FlightService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
