@@ -1,6 +1,6 @@
 package mariavv.airportscheduleapispring.service;
 
-import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrival;
+import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrivalDto;
 import mariavv.airportscheduleapispring.domain.dto.FlightDto;
 import mariavv.airportscheduleapispring.domain.dto.FlightWithIdDto;
 
@@ -19,5 +19,5 @@ public interface FlightService {
     List<FlightWithIdDto> findByAirportFromAndAirportToAndArrivalBetween(Integer airportFromId, Integer airportToId,
                                                                          Date arrivalFrom, Date arrivalTo);
 
-    List<FlightWithIdDto> getFlightsByAirportsAndArrivalWithDelays(AirportsAndFactArrival factArrival);
+    List<FlightWithIdDto> getFlightsByAirportsAndArrivalWithDelays(AirportsAndFactArrivalDto factArrival);
 }

@@ -17,13 +17,11 @@ public class AirportController {
         this.service = service;
     }
 
-    @PreAuthorize("hasAuthority('schedule:read')")
     @GetMapping()
     public List<AirportDto> getAirports() {
         return service.getAirports();
     }
 
-    @PreAuthorize("hasAuthority('schedule:read')")
     @GetMapping("/{name}")
     public Integer getOne(@PathVariable String name) {
         return service.getAirportIdByName(name);

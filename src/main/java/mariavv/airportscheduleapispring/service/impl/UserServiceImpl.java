@@ -1,10 +1,12 @@
 package mariavv.airportscheduleapispring.service.impl;
 
 import mariavv.airportscheduleapispring.domain.dto.UserDto;
+import mariavv.airportscheduleapispring.domain.dto.UserPassDto;
 import mariavv.airportscheduleapispring.domain.entity.PermissionEntity;
 import mariavv.airportscheduleapispring.domain.entity.RoleEntity;
 import mariavv.airportscheduleapispring.domain.entity.UserEntity;
-import mariavv.airportscheduleapispring.exception.NotFoundException;
+import mariavv.airportscheduleapispring.exception.PasswordNotMatchesException;
+import mariavv.airportscheduleapispring.exception.UserExistAlready;
 import mariavv.airportscheduleapispring.repo.RoleRepository;
 import mariavv.airportscheduleapispring.repo.UserRepository;
 import mariavv.airportscheduleapispring.service.UserService;
@@ -44,10 +46,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDto addUser(String name, String password) {
+    public UserDto addUser(UserPassDto newUser) {
+        if (userRepository.findByName(newUser.getName()).orElse(null) != null) {
+            throw new UserExistAlready();
+        }
         UserEntity user = new UserEntity();
-        user.setName(name);
-        user.setPassword(passwordEncoder.encode(password));
+        user.setName(newUser.getName());
+        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
         userRepository.save(user);
 
         return new UserDto(user.getId(), user.getName(), null);
@@ -59,16 +64,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void changePassword(String name, String oldPassword, String password) {
+    public void changePassword(String name, String password, String newPassword) {
         UserEntity user = userRepository.findByName(name).orElse(null);
-        if (user == null) {
-            throw new NotFoundException("User not found");
-        }
-        if (passwordEncoder.matches(oldPassword, user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(password));
+        assert user != null;
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(newPassword));
         } else {
-            //todo PassNotMatchesEx
-            throw new NotFoundException("");
+            throw new PasswordNotMatchesException();
         }
     }
 

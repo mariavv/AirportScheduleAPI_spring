@@ -22,7 +22,7 @@ public class RoleController {
     }
 
     @PreAuthorize("hasAuthority('auth')")
-    @GetMapping()
+    @GetMapping
     public List<RoleDto> getRoles() {
         return service.getRoles();
     }

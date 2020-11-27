@@ -1,6 +1,8 @@
 package mariavv.airportscheduleapispring.controller;
 
+import mariavv.airportscheduleapispring.domain.dto.ChangePasswordDto;
 import mariavv.airportscheduleapispring.domain.dto.UserDto;
+import mariavv.airportscheduleapispring.domain.dto.UserPassDto;
 import mariavv.airportscheduleapispring.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,32 +22,30 @@ public class UserController {
         this.service = service;
     }
 
-    @PreAuthorize("hasAuthority('auth:write')")
+    @PreAuthorize("hasAuthority('auth')")
     @GetMapping()
     public List<UserDto> getUsers() {
         return service.getUsers();
     }
 
-    @PreAuthorize("hasAuthority('auth:write')")
-    @PostMapping("")
-    public ResponseEntity<UserDto> create(@RequestParam String name, @RequestParam String password) {
-        if (isEmpty(name) || isEmpty(password)) {
+    @PostMapping
+    public ResponseEntity<UserDto> create(@RequestBody UserPassDto user) {
+        if (isEmpty(user.getName()) || isEmpty(user.getPassword())) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok().body(service.addUser(name, password));
+        return ResponseEntity.ok().body(service.addUser(user));
     }
 
-    @PreAuthorize("hasAuthority('auth:write')")
+    @PreAuthorize("hasAuthority('auth')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
         service.deleteUser(id);
     }
 
-    @PostMapping()
-    public ResponseEntity<String> password(@RequestParam String name,
-                                           @RequestParam String oldPassword,
-                                           @RequestParam String password) {
-        service.changePassword(name, oldPassword, password);
+    @PreAuthorize("hasAuthority('schedule:read')")
+    @PostMapping("/change_password")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDto pass) {
+        service.changePassword(pass.getName(), pass.getPassword(), pass.getNewPassword());
         return ResponseEntity.ok().build();
     }
 

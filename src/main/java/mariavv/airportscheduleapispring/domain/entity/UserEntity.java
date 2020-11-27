@@ -19,7 +19,6 @@ public class UserEntity {
     private String name;
 
     @Column(name = "password")
-    @Min(4)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

@@ -1,6 +1,6 @@
 package mariavv.airportscheduleapispring.service.impl;
 
-import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrival;
+import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrivalDto;
 import mariavv.airportscheduleapispring.domain.dto.FlightDto;
 import mariavv.airportscheduleapispring.domain.dto.FlightWithIdDto;
 import mariavv.airportscheduleapispring.domain.entity.AirportEntity;
@@ -111,7 +111,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public List<FlightWithIdDto> getFlightsByAirportsAndArrivalWithDelays(AirportsAndFactArrival params) {
+    public List<FlightWithIdDto> getFlightsByAirportsAndArrivalWithDelays(AirportsAndFactArrivalDto params) {
         return flightMapper.toDtoList(flightRepository.getFlightsByAirportsAndArrivalWithDelays(
                 params.getAirportFromId(), params.getAirportToId(), params.getArrivalTo()));
     }
