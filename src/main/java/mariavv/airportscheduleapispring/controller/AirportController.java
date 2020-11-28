@@ -2,6 +2,7 @@ package mariavv.airportscheduleapispring.controller;
 
 import mariavv.airportscheduleapispring.domain.dto.AirportDto;
 import mariavv.airportscheduleapispring.service.AirportService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,29 +11,31 @@ import java.util.List;
 @RequestMapping("/api/v1/airports")
 public class AirportController {
 
-    private final AirportService airportService;
+    private final AirportService service;
 
-    public AirportController(AirportService airportService) {
-        this.airportService = airportService;
+    public AirportController(AirportService service) {
+        this.service = service;
     }
 
     @GetMapping()
     public List<AirportDto> getAirports() {
-        return airportService.getAirports();
+        return service.getAirports();
     }
 
     @GetMapping("/{name}")
     public Integer getOne(@PathVariable String name) {
-        return airportService.getAirportIdByName(name);
+        return service.getAirportIdByName(name);
     }
 
-    @PostMapping()
+    @PreAuthorize("hasAuthority('schedule:write')")
+    @PostMapping("/{name}")
     public AirportDto create(@PathVariable String name) {
-        return airportService.addAirport(name);
+        return service.addAirport(name);
     }
 
+    @PreAuthorize("hasAuthority('schedule:write')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
-        airportService.deleteAirport(id);
+        service.deleteAirport(id);
     }
 }

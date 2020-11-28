@@ -1,12 +1,13 @@
 package mariavv.airportscheduleapispring.controller;
 
-import mariavv.airportscheduleapispring.domain.dto.AirportsAndArrivalInterval;
-import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrival;
+import mariavv.airportscheduleapispring.domain.dto.AirportsAndArrivalIntervalDto;
+import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrivalDto;
 import mariavv.airportscheduleapispring.domain.dto.FlightDto;
 import mariavv.airportscheduleapispring.domain.dto.FlightWithIdDto;
 import mariavv.airportscheduleapispring.service.FlightService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,64 +18,67 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @RequestMapping("/api/v1/flights")
 public class FlightController {
 
-    private final FlightService flightService;
+    private final FlightService service;
 
-    public FlightController(FlightService flightService) {
-        this.flightService = flightService;
+    public FlightController(FlightService service) {
+        this.service = service;
     }
 
-    @GetMapping()
+    @GetMapping
     public List<FlightWithIdDto> flights() {
-        return flightService.getFlights();
+        return service.getFlights();
     }
 
+    @PreAuthorize("hasAuthority('schedule:write')")
     @PostMapping
     public ResponseEntity<String> create(@RequestBody FlightDto flight) {
         if (isEmpty(flight)) {
             return ResponseEntity.badRequest().build();
         }
 
-        if (flightService.createFlight(flight)) {
+        if (service.createFlight(flight)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @PutMapping()
+    @PreAuthorize("hasAuthority('schedule:write')")
+    @PutMapping
     public ResponseEntity<String> update(@RequestParam Integer id,
                                          @RequestParam Boolean isCanceled) {
         if (isEmpty(id) || isEmpty(isCanceled)) {
             return ResponseEntity.badRequest().build();
         }
 
-        flightService.updateIsCanceled(id, isCanceled);
+        service.updateIsCanceled(id, isCanceled);
 
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasAuthority('schedule:write')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
-        flightService.deleteFlight(id);
+        service.deleteFlight(id);
     }
 
     @GetMapping("/by-airport-and-arrival")
-    public ResponseEntity<List<FlightWithIdDto>> getFlightsByAirportAndArrivalInterval(@RequestBody AirportsAndArrivalInterval target) {
+    public ResponseEntity<List<FlightWithIdDto>> getFlightsByAirportAndArrivalInterval(@RequestBody AirportsAndArrivalIntervalDto target) {
         if (isEmpty(target.getAirportFromId()) || isEmpty(target.getAirportToId()) ||
                 isEmpty(target.getArrivalFrom()) || isEmpty(target.getArrivalTo())) {
             return ResponseEntity.badRequest().build();
         }
 
         List<FlightWithIdDto> result =
-                flightService.findByAirportFromAndAirportToAndArrivalBetween(target.getAirportFromId(),
+                service.findByAirportFromAndAirportToAndArrivalBetween(target.getAirportFromId(),
                         target.getAirportToId(), target.getArrivalFrom(), target.getArrivalTo());
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/by-airport-and-arrival-delay")
-    public ResponseEntity<List<FlightWithIdDto>> getFlightsByAirportsAndArrivalWithDelays(@RequestBody AirportsAndFactArrival target) {
+    public ResponseEntity<List<FlightWithIdDto>> getFlightsByAirportsAndArrivalWithDelays(@RequestBody AirportsAndFactArrivalDto target) {
 
-        List<FlightWithIdDto> result = flightService.getFlightsByAirportsAndArrivalWithDelays(target);
+        List<FlightWithIdDto> result = service.getFlightsByAirportsAndArrivalWithDelays(target);
         return ResponseEntity.ok(result);
     }
 }

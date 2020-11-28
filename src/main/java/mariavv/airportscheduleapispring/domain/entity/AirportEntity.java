@@ -12,7 +12,6 @@ public class AirportEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Size(min=2, max=20)
     @Column(name = "name")
     private String name;
 

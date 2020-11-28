@@ -7,7 +7,7 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import java.util.Date;
 
-public final class AirportsAndArrivalInterval {
+public final class AirportsAndArrivalIntervalDto {
     @Min(0)
     private final Integer airportFromId;
     @Min(0)
@@ -18,10 +18,10 @@ public final class AirportsAndArrivalInterval {
     private final Date arrivalTo;
 
     @JsonCreator
-    public AirportsAndArrivalInterval(@JsonProperty(value = "airportFromId") Integer airportFromId,
-                                      @JsonProperty(value = "airportToId") Integer airportToId,
-                                      @JsonProperty(value = "arrivalFrom") Date arrivalFrom,
-                                      @JsonProperty(value = "arrivalTo") Date arrivalTo) {
+    public AirportsAndArrivalIntervalDto(@JsonProperty(value = "airportFromId") Integer airportFromId,
+                                         @JsonProperty(value = "airportToId") Integer airportToId,
+                                         @JsonProperty(value = "arrivalFrom") Date arrivalFrom,
+                                         @JsonProperty(value = "arrivalTo") Date arrivalTo) {
         this.airportFromId = airportFromId;
         this.airportToId = airportToId;
         this.ArrivalFrom = arrivalFrom;
