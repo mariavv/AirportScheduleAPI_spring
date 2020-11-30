@@ -5,6 +5,7 @@ import mariavv.airportscheduleapispring.domain.dto.FlightDto;
 import mariavv.airportscheduleapispring.domain.dto.FlightWithIdDto;
 import mariavv.airportscheduleapispring.domain.entity.AirportEntity;
 import mariavv.airportscheduleapispring.domain.entity.FlightEntity;
+import mariavv.airportscheduleapispring.mapper.AnotherFlightMapper;
 import mariavv.airportscheduleapispring.mapper.FlightMapper;
 import mariavv.airportscheduleapispring.repo.AirportRepository;
 import mariavv.airportscheduleapispring.repo.FlightRepository;
@@ -25,39 +26,32 @@ public class FlightServiceImpl implements FlightService {
     private final AirportRepository airportRepository;
     private final FlightRepository flightRepository;
     private final FlightMapper flightMapper;
+    private final AnotherFlightMapper anotherFlightMapper;
 
-    public FlightServiceImpl(AirportRepository airportRepository, FlightRepository flightRepository, FlightMapper flightMapper) {
+    public FlightServiceImpl(AirportRepository airportRepository, FlightRepository flightRepository, FlightMapper flightMapper, AnotherFlightMapper anotherFlightMapper) {
         this.airportRepository = airportRepository;
         this.flightRepository = flightRepository;
         this.flightMapper = flightMapper;
+        this.anotherFlightMapper = anotherFlightMapper;
     }
 
     @Override
     public List<FlightWithIdDto> getFlights() {
         return flightRepository.findAll()
                 .stream()
-                .map(flightMapper::toDto)
+                .map(anotherFlightMapper::toFlightWithIdDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Boolean createFlight(FlightDto flight) {
-        FlightEntity flightEntity = new FlightEntity();
-
-        flightEntity.setAirportFrom(airportRepository.findById(flight.getAirportFromId()).get());
-        flightEntity.setAirportTo(airportRepository.findById(flight.getAirportToId()).get());
-
-        flightEntity.setDeparture(flight.getDeparture());
-        flightEntity.setArrival(flight.getArrival());
-
-        flightEntity.setDelay(flight.getDelay());
-        flightEntity.setDelayArrival(flight.getDelayArrival());
-
         Integer postponedOnId = flight.getPostponedOn();
-        FlightEntity postponedOn = postponedOnId == null ? null : flightRepository.findById(postponedOnId).orElse(null);
-        flightEntity.setPostponedOn(postponedOn);
-
-        flightEntity.setIsCanceled(flight.getIsCanceled());
+        FlightEntity flightEntity = anotherFlightMapper.toFlightEntity(
+                flight,
+                airportRepository.findById(flight.getAirportFromId()).get(),
+                airportRepository.findById(flight.getAirportToId()).get(),
+                postponedOnId == null ? null : flightRepository.findById(postponedOnId).orElse(null)
+        );
 
         try {
             flightRepository.save(flightEntity);
@@ -102,12 +96,12 @@ public class FlightServiceImpl implements FlightService {
         List<FlightEntity> flights = flightRepository
                 .findByAirportFromAndAirportToAndArrivalBetween(airportFrom.get(), airportTo.get(), arrivalFrom, arrivalTo);
 
-        return flightMapper.toDtoList(flights);
+        return anotherFlightMapper.toDtoList(flights);
     }
 
     @Override
     public List<FlightWithIdDto> getFlightsByAirportsAndArrivalWithDelays(AirportsAndFactArrivalDto params) {
-        return flightMapper.toDtoList(flightRepository.getFlightsByAirportsAndArrivalWithDelays(
+        return anotherFlightMapper.toDtoList(flightRepository.getFlightsByAirportsAndArrivalWithDelays(
                 params.getAirportFromId(), params.getAirportToId(), params.getArrivalTo()));
     }
 }
