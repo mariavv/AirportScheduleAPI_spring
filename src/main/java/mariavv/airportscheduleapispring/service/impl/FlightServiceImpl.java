@@ -54,12 +54,7 @@ public class FlightServiceImpl implements FlightService {
         flightEntity.setDelayArrival(flight.getDelayArrival());
 
         Integer postponedOnId = flight.getPostponedOn();
-        FlightEntity postponedOn;
-        if (postponedOnId != null) {
-            postponedOn = flightRepository.findById(postponedOnId).orElse(null);
-        } else {
-            postponedOn = null;
-        }
+        FlightEntity postponedOn = postponedOnId == null ? null : flightRepository.findById(postponedOnId).orElse(null);
         flightEntity.setPostponedOn(postponedOn);
 
         flightEntity.setIsCanceled(flight.getIsCanceled());
