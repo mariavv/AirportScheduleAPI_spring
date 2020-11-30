@@ -1,6 +1,7 @@
 package mariavv.airportscheduleapispring.domain.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Table(name = "roles")
 @Setter
 @Getter
+@NoArgsConstructor
 public class RoleEntity {
 
     @Id
@@ -31,7 +33,4 @@ public class RoleEntity {
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private Set<PermissionEntity> permissions;
-
-    public RoleEntity() {
-    }
 }

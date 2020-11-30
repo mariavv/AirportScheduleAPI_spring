@@ -1,6 +1,7 @@
 package mariavv.airportscheduleapispring.domain.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Future;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Entity
 @Table(name = "flight")
 @Data
+@NoArgsConstructor
 public class FlightEntity {
 
     @Id
@@ -45,7 +47,4 @@ public class FlightEntity {
 
     @Column(name = "is_canceled")
     private Boolean isCanceled;
-
-    public FlightEntity() {
-    }
 }
