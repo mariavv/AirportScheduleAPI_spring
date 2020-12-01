@@ -2,9 +2,11 @@ package mariavv.airportscheduleapispring.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 
 import javax.validation.constraints.Size;
 
+@Getter
 public class ChangePasswordDto {
     @Size(min = 2, max = 50, message = "Length must be between 2..50 characters")
     private final String name;
@@ -20,17 +22,5 @@ public class ChangePasswordDto {
         this.name = name;
         this.password = password;
         this.newPassword = newPassword;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
     }
 }

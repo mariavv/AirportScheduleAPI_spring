@@ -1,28 +1,14 @@
 package mariavv.airportscheduleapispring.domain.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.Set;
 
+@Getter
+@AllArgsConstructor
 public class UserDto {
-
     private final Integer id;
     private final String name;
     private final Set<String> roles;
-
-    public UserDto(Integer id, String name, Set<String> roles) {
-        this.id = id;
-        this.name = name;
-        this.roles = roles;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Set<String> getRoles() {
-        return roles;
-    }
 }

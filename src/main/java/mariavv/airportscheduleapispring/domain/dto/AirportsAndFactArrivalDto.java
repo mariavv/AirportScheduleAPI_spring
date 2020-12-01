@@ -2,11 +2,13 @@ package mariavv.airportscheduleapispring.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import java.util.Date;
 
+@Getter
 public final class AirportsAndFactArrivalDto {
     @Min(0)
     private final Integer airportFromId;
@@ -22,17 +24,5 @@ public final class AirportsAndFactArrivalDto {
         this.airportFromId = airportFromId;
         this.airportToId = airportToId;
         this.arrivalTo = arrivalTo;
-    }
-
-    public Integer getAirportFromId() {
-        return airportFromId;
-    }
-
-    public Integer getAirportToId() {
-        return airportToId;
-    }
-
-    public Date getArrivalTo() {
-        return arrivalTo;
     }
 }
