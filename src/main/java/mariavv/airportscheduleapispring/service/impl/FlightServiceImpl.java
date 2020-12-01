@@ -1,5 +1,6 @@
 package mariavv.airportscheduleapispring.service.impl;
 
+import mariavv.airportscheduleapispring.domain.dto.AirportsAndArrivalIntervalDto;
 import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrivalDto;
 import mariavv.airportscheduleapispring.domain.dto.FlightDto;
 import mariavv.airportscheduleapispring.domain.dto.FlightWithIdDto;
@@ -83,18 +84,15 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public List<FlightWithIdDto> findByAirportFromAndAirportToAndArrivalBetween(Integer airportFromId,
-                                                                                Integer airportToId,
-                                                                                Date arrivalFrom,
-                                                                                Date arrivalTo) {
-        Optional<AirportEntity> airportFrom = airportRepository.findById(airportFromId);
-        Optional<AirportEntity> airportTo = airportRepository.findById(airportToId);
+    public List<FlightWithIdDto> findByAirportFromAndAirportToAndArrivalBetween(AirportsAndArrivalIntervalDto target) {
+        Optional<AirportEntity> airportFrom = airportRepository.findById(target.getAirportFromId());
+        Optional<AirportEntity> airportTo = airportRepository.findById(target.getAirportToId());
         if (airportFrom.isEmpty() || airportTo.isEmpty()) {
             return new ArrayList<>();
         }
 
         List<FlightEntity> flights = flightRepository
-                .findByAirportFromAndAirportToAndArrivalBetween(airportFrom.get(), airportTo.get(), arrivalFrom, arrivalTo);
+                .findByAirportFromAndAirportToAndArrivalBetween(airportFrom.get(), airportTo.get(), target.getArrivalFrom(), target.getArrivalTo());
 
         return anotherFlightMapper.toDtoList(flights);
     }

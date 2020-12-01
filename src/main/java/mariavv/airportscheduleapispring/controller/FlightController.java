@@ -70,8 +70,7 @@ public class FlightController {
         }
 
         List<FlightWithIdDto> result =
-                service.findByAirportFromAndAirportToAndArrivalBetween(target.getAirportFromId(),
-                        target.getAirportToId(), target.getArrivalFrom(), target.getArrivalTo());
+                service.findByAirportFromAndAirportToAndArrivalBetween(target);
         return ResponseEntity.ok(result);
     }
 
