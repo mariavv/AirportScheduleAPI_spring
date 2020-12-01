@@ -1,5 +1,6 @@
 package mariavv.airportscheduleapispring.service.impl;
 
+import lombok.AllArgsConstructor;
 import mariavv.airportscheduleapispring.domain.dto.RoleDto;
 import mariavv.airportscheduleapispring.domain.entity.PermissionEntity;
 import mariavv.airportscheduleapispring.domain.entity.RoleEntity;
@@ -13,15 +14,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
-
-    @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository, PermissionRepository permissionRepository) {
-        this.roleRepository = roleRepository;
-        this.permissionRepository = permissionRepository;
-    }
 
     @Override
     public List<RoleDto> getRoles() {

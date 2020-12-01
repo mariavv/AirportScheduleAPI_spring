@@ -1,5 +1,6 @@
 package mariavv.airportscheduleapispring.service.impl;
 
+import lombok.AllArgsConstructor;
 import mariavv.airportscheduleapispring.domain.dto.AirportDto;
 import mariavv.airportscheduleapispring.domain.entity.AirportEntity;
 import mariavv.airportscheduleapispring.exception.NotFoundException;
@@ -12,13 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class AirportServiceImpl implements AirportService {
     private final AirportRepository airportRepository;
-
-    @Autowired
-    public AirportServiceImpl(AirportRepository airportRepository) {
-        this.airportRepository = airportRepository;
-    }
 
     @Override
     public List<AirportDto> getAirports() {

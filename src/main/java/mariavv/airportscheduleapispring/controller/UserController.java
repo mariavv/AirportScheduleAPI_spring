@@ -1,5 +1,6 @@
 package mariavv.airportscheduleapispring.controller;
 
+import lombok.AllArgsConstructor;
 import mariavv.airportscheduleapispring.domain.dto.ChangePasswordDto;
 import mariavv.airportscheduleapispring.domain.dto.UserDto;
 import mariavv.airportscheduleapispring.domain.dto.UserPassDto;
@@ -15,12 +16,10 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@AllArgsConstructor
 public class UserController {
-    private final UserService service;
 
-    public UserController(UserService service) {
-        this.service = service;
-    }
+    private final UserService service;
 
     @PreAuthorize("hasAuthority('auth')")
     @GetMapping()

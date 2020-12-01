@@ -1,5 +1,6 @@
 package mariavv.airportscheduleapispring.service.impl;
 
+import lombok.AllArgsConstructor;
 import mariavv.airportscheduleapispring.domain.dto.UserDto;
 import mariavv.airportscheduleapispring.domain.dto.UserPassDto;
 import mariavv.airportscheduleapispring.domain.entity.PermissionEntity;
@@ -25,17 +26,12 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toSet;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public List<UserDto> getUsers() {

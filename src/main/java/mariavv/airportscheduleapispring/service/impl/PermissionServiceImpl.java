@@ -1,5 +1,6 @@
 package mariavv.airportscheduleapispring.service.impl;
 
+import lombok.AllArgsConstructor;
 import mariavv.airportscheduleapispring.domain.dto.PermissionDto;
 import mariavv.airportscheduleapispring.domain.entity.PermissionEntity;
 import mariavv.airportscheduleapispring.repo.PermissionRepository;
@@ -11,14 +12,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class PermissionServiceImpl implements PermissionService {
 
     private final PermissionRepository permissionRepository;
-
-    @Autowired
-    public PermissionServiceImpl(PermissionRepository permissionRepository) {
-        this.permissionRepository = permissionRepository;
-    }
 
     @Override
     public List<PermissionDto> getPermissions() {

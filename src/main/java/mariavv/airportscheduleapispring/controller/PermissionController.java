@@ -1,5 +1,6 @@
 package mariavv.airportscheduleapispring.controller;
 
+import lombok.AllArgsConstructor;
 import mariavv.airportscheduleapispring.domain.dto.PermissionDto;
 import mariavv.airportscheduleapispring.service.PermissionService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,13 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/permissions")
+@AllArgsConstructor
 public class PermissionController {
 
     private final PermissionService service;
-
-    public PermissionController(PermissionService service) {
-        this.service = service;
-    }
 
     @PreAuthorize("hasAuthority('auth')")
     @GetMapping()

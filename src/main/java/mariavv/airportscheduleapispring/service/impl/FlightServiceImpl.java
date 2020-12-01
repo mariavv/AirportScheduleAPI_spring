@@ -1,5 +1,6 @@
 package mariavv.airportscheduleapispring.service.impl;
 
+import lombok.AllArgsConstructor;
 import mariavv.airportscheduleapispring.domain.dto.AirportsAndArrivalIntervalDto;
 import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrivalDto;
 import mariavv.airportscheduleapispring.domain.dto.FlightDto;
@@ -22,19 +23,13 @@ import java.util.stream.Collectors;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
+@AllArgsConstructor
 public class FlightServiceImpl implements FlightService {
 
     private final AirportRepository airportRepository;
     private final FlightRepository flightRepository;
     private final FlightMapper flightMapper;
     private final AnotherFlightMapper anotherFlightMapper;
-
-    public FlightServiceImpl(AirportRepository airportRepository, FlightRepository flightRepository, FlightMapper flightMapper, AnotherFlightMapper anotherFlightMapper) {
-        this.airportRepository = airportRepository;
-        this.flightRepository = flightRepository;
-        this.flightMapper = flightMapper;
-        this.anotherFlightMapper = anotherFlightMapper;
-    }
 
     @Override
     public List<FlightWithIdDto> getFlights() {
