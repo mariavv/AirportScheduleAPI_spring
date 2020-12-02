@@ -14,8 +14,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class BaseExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
-    protected ResponseEntity<ErrorInfoDto> handleNotFoundException(Exception e) {
-        return new ResponseEntity<>(new ErrorInfoDto(e.getMessage()),
+    protected ResponseEntity<ErrorInfoDto> handleNotFoundException(Exception ex) {
+        return new ResponseEntity<>(new ErrorInfoDto(ex.getMessage()),
                 HttpStatus.NOT_FOUND);
     }
 
@@ -38,8 +38,8 @@ public class BaseExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    protected ResponseEntity<ErrorInfoDto> handleRuntimeException() {
-        return new ResponseEntity<>(new ErrorInfoDto("Unknown error"),
+    protected ResponseEntity<ErrorInfoDto> handleRuntimeException(Exception ex) {
+        return new ResponseEntity<>(new ErrorInfoDto(ex.getMessage()),
                 HttpStatus.MULTI_STATUS);
     }
 }
