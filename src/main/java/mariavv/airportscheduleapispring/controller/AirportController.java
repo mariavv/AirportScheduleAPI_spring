@@ -1,5 +1,6 @@
 package mariavv.airportscheduleapispring.controller;
 
+import lombok.AllArgsConstructor;
 import mariavv.airportscheduleapispring.domain.dto.AirportDto;
 import mariavv.airportscheduleapispring.service.AirportService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,13 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/airports")
+@AllArgsConstructor
 public class AirportController {
 
     private final AirportService service;
-
-    public AirportController(AirportService service) {
-        this.service = service;
-    }
 
     @GetMapping()
     public List<AirportDto> getAirports() {

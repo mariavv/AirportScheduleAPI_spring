@@ -1,10 +1,17 @@
 package mariavv.airportscheduleapispring.domain.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "roles")
+@Setter
+@Getter
+@NoArgsConstructor
 public class RoleEntity {
 
     @Id
@@ -16,45 +23,14 @@ public class RoleEntity {
     private String role;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="user_roles",
-            joinColumns=@JoinColumn(name="role_id"),
-            inverseJoinColumns=@JoinColumn(name="user_id"))
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<UserEntity> users;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable (name="role_permissions",
-            joinColumns=@JoinColumn (name="role_id"),
-            inverseJoinColumns=@JoinColumn(name="permission_id"))
+    @JoinTable(name = "role_permissions",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private Set<PermissionEntity> permissions;
-
-    public RoleEntity() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Set<PermissionEntity> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(Set<PermissionEntity> permissions) {
-        this.permissions = permissions;
-    }
-
-    public Set<UserEntity> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<UserEntity> users) {
-        this.users = users;
-    }
 }

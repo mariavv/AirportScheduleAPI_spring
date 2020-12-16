@@ -2,12 +2,14 @@ package mariavv.airportscheduleapispring.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import java.time.LocalTime;
 import java.util.Date;
 
+@Getter
 public final class FlightDto {
     @Min(0)
     private final Integer airportFromId;
@@ -39,37 +41,5 @@ public final class FlightDto {
         this.delayArrival = delayArrival;
         this.postponedOn = postponedOn;
         this.isCanceled = isCanceled;
-    }
-
-    public int getAirportFromId() {
-        return airportFromId;
-    }
-
-    public int getAirportToId() {
-        return airportToId;
-    }
-
-    public Date getDeparture() {
-        return departure;
-    }
-
-    public Date getArrival() {
-        return arrival;
-    }
-
-    public LocalTime getDelay() {
-        return delay;
-    }
-
-    public LocalTime getDelayArrival() {
-        return delayArrival;
-    }
-
-    public Integer getPostponedOn() {
-        return postponedOn;
-    }
-
-    public Boolean getIsCanceled() {
-        return isCanceled;
     }
 }

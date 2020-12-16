@@ -1,10 +1,17 @@
 package mariavv.airportscheduleapispring.domain.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "permissions")
+@Setter
+@Getter
+@NoArgsConstructor
 public class PermissionEntity {
 
     @Id
@@ -16,31 +23,8 @@ public class PermissionEntity {
     private String permission;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable (name="role_permissions",
-            joinColumns=@JoinColumn (name="permission_id"),
-            inverseJoinColumns=@JoinColumn(name="role_id"))
+    @JoinTable(name = "role_permissions",
+            joinColumns = @JoinColumn(name = "permission_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles;
-
-    public PermissionEntity() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getPermission() {
-        return permission;
-    }
-
-    public void setPermission(String permission) {
-        this.permission = permission;
-    }
-
-    public Set<RoleEntity> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<RoleEntity> roles) {
-        this.roles = roles;
-    }
 }

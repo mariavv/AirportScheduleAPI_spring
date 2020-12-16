@@ -1,5 +1,6 @@
 package mariavv.airportscheduleapispring.controller;
 
+import lombok.AllArgsConstructor;
 import mariavv.airportscheduleapispring.domain.dto.AirportsAndArrivalIntervalDto;
 import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrivalDto;
 import mariavv.airportscheduleapispring.domain.dto.FlightDto;
@@ -16,13 +17,10 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 
 @RestController
 @RequestMapping("/api/v1/flights")
+@AllArgsConstructor
 public class FlightController {
 
     private final FlightService service;
-
-    public FlightController(FlightService service) {
-        this.service = service;
-    }
 
     @GetMapping
     public List<FlightWithIdDto> flights() {
@@ -70,8 +68,7 @@ public class FlightController {
         }
 
         List<FlightWithIdDto> result =
-                service.findByAirportFromAndAirportToAndArrivalBetween(target.getAirportFromId(),
-                        target.getAirportToId(), target.getArrivalFrom(), target.getArrivalTo());
+                service.findByAirportFromAndAirportToAndArrivalBetween(target);
         return ResponseEntity.ok(result);
     }
 

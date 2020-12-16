@@ -1,5 +1,6 @@
 package mariavv.airportscheduleapispring.service;
 
+import mariavv.airportscheduleapispring.domain.dto.AirportsAndArrivalIntervalDto;
 import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrivalDto;
 import mariavv.airportscheduleapispring.domain.dto.FlightDto;
 import mariavv.airportscheduleapispring.domain.dto.FlightWithIdDto;
@@ -16,8 +17,7 @@ public interface FlightService {
 
     Boolean updateIsCanceled(Integer id, Boolean isCancelled);
 
-    List<FlightWithIdDto> findByAirportFromAndAirportToAndArrivalBetween(Integer airportFromId, Integer airportToId,
-                                                                         Date arrivalFrom, Date arrivalTo);
+    List<FlightWithIdDto> findByAirportFromAndAirportToAndArrivalBetween(AirportsAndArrivalIntervalDto target);
 
     List<FlightWithIdDto> getFlightsByAirportsAndArrivalWithDelays(AirportsAndFactArrivalDto factArrival);
 }
