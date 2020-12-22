@@ -1,8 +1,8 @@
 package mariavv.airportscheduleapispring.service.impl;
 
 import lombok.AllArgsConstructor;
-import mariavv.airportscheduleapispring.domain.dto.UserDto;
-import mariavv.airportscheduleapispring.domain.dto.UserPassDto;
+import mariavv.airportscheduleapispring.domain.dto.request.UserPassRequest;
+import mariavv.airportscheduleapispring.domain.dto.response.UserResponse;
 import mariavv.airportscheduleapispring.domain.entity.PermissionEntity;
 import mariavv.airportscheduleapispring.domain.entity.RoleEntity;
 import mariavv.airportscheduleapispring.domain.entity.UserEntity;
@@ -34,15 +34,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public List<UserDto> getUsers() {
+    public List<UserResponse> getUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(user -> new UserDto(user.getId(), user.getName(), null/*todo*/))
+                .map(user -> new UserResponse(
+                        user.getId(),
+                        user.getName(),
+                        user.getRoles()
+                                .stream()
+                                .map(RoleEntity::getRole)
+                                .collect(Collectors.toUnmodifiableSet())
+                ))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public UserDto addUser(UserPassDto newUser) {
+    public UserResponse addUser(UserPassRequest newUser) {
         if (userRepository.findByName(newUser.getName()).orElse(null) != null) {
             throw new UserExistAlready();
         }
@@ -51,7 +58,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
         userRepository.save(user);
 
-        return new UserDto(user.getId(), user.getName(), null);
+        return new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getRoles()
+                        .stream()
+                        .map(RoleEntity::getRole)
+                        .collect(Collectors.toUnmodifiableSet())
+        );
     }
 
     @Override

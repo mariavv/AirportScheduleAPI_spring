@@ -1,12 +1,11 @@
 package mariavv.airportscheduleapispring.service.impl;
 
 import lombok.AllArgsConstructor;
-import mariavv.airportscheduleapispring.domain.dto.AirportDto;
+import mariavv.airportscheduleapispring.domain.dto.response.AirportResponse;
 import mariavv.airportscheduleapispring.domain.entity.AirportEntity;
 import mariavv.airportscheduleapispring.exception.NotFoundException;
 import mariavv.airportscheduleapispring.repo.AirportRepository;
 import mariavv.airportscheduleapispring.service.AirportService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +17,10 @@ public class AirportServiceImpl implements AirportService {
     private final AirportRepository airportRepository;
 
     @Override
-    public List<AirportDto> getAirports() {
+    public List<AirportResponse> getAirports() {
         return airportRepository.findAll()
                 .stream()
-                .map(town -> new AirportDto(town.getId(), town.getName()))
+                .map(town -> new AirportResponse(town.getId(), town.getName()))
                 .collect(Collectors.toList());
     }
 
@@ -35,12 +34,12 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
-    public AirportDto addAirport(String name) {
+    public AirportResponse addAirport(String name) {
         AirportEntity airport = new AirportEntity();
         airport.setName(name);
         airportRepository.save(airport);
 
-        return new AirportDto(airport.getId(), airport.getName());
+        return new AirportResponse(airport.getId(), airport.getName());
     }
 
     @Override

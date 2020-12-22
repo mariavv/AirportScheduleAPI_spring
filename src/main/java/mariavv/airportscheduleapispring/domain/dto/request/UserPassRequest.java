@@ -1,4 +1,4 @@
-package mariavv.airportscheduleapispring.domain.dto;
+package mariavv.airportscheduleapispring.domain.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,7 +7,7 @@ import lombok.Getter;
 import javax.validation.constraints.Size;
 
 @Getter
-public class UserPassDto {
+public class UserPassRequest {
 
     @Size(min = 2, max = 50, message = "Length must be between 2..50 characters")
     private final String name;
@@ -16,8 +16,8 @@ public class UserPassDto {
     private final String password;
 
     @JsonCreator
-    public UserPassDto(@JsonProperty(value = "name") String name,
-                       @JsonProperty(value = "password") String password) {
+    public UserPassRequest(@JsonProperty(value = "name") String name,
+                           @JsonProperty(value = "password") String password) {
         this.name = name;
         this.password = password;
     }

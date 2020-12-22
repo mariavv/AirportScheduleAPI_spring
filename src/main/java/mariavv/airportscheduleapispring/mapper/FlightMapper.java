@@ -1,7 +1,8 @@
 package mariavv.airportscheduleapispring.mapper;
 
 import mariavv.airportscheduleapispring.domain.dto.FlightDto;
-import mariavv.airportscheduleapispring.domain.dto.FlightWithIdDto;
+import mariavv.airportscheduleapispring.domain.dto.request.FlightRequest;
+import mariavv.airportscheduleapispring.domain.dto.response.FlightWithIdResponse;
 import mariavv.airportscheduleapispring.domain.entity.FlightEntity;
 import org.springframework.stereotype.Component;
 
@@ -9,13 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component("FlightMapper")
-public class FlightMapper implements EntityDtoMapper<FlightEntity, FlightWithIdDto> {
+public class FlightMapper implements EntityDtoMapper<FlightEntity, FlightWithIdResponse> {
 
     @Override
-    public FlightWithIdDto toDto(FlightEntity entity) {
+    public FlightWithIdResponse toDto(FlightEntity entity) {
         FlightEntity postponedOn = entity.getPostponedOn();
 
-        return new FlightWithIdDto(
+        return new FlightWithIdResponse(
                 entity.getId(),
                         new FlightDto(
                                 entity.getAirportFrom().getId(),
@@ -31,8 +32,8 @@ public class FlightMapper implements EntityDtoMapper<FlightEntity, FlightWithIdD
     }
 
     @Override
-    public List<FlightWithIdDto> toDtoList(List<FlightEntity> entityList) {
-        List<FlightWithIdDto> flightsDto = new ArrayList<>(entityList.size());
+    public List<FlightWithIdResponse> toDtoList(List<FlightEntity> entityList) {
+        List<FlightWithIdResponse> flightsDto = new ArrayList<>(entityList.size());
 
         for (FlightEntity flight : entityList) {
             flightsDto.add(toDto(flight));

@@ -1,7 +1,7 @@
 package mariavv.airportscheduleapispring.controller;
 
 import lombok.AllArgsConstructor;
-import mariavv.airportscheduleapispring.domain.dto.RoleDto;
+import mariavv.airportscheduleapispring.domain.dto.response.RoleResponse;
 import mariavv.airportscheduleapispring.service.RoleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +21,13 @@ public class RoleController {
 
     @PreAuthorize("hasAuthority('auth')")
     @GetMapping
-    public List<RoleDto> getRoles() {
+    public List<RoleResponse> getRoles() {
         return service.getRoles();
     }
 
     @PreAuthorize("hasAuthority('auth')")
     @PostMapping("/{name}")
-    public RoleDto create(@PathVariable String name) {
+    public RoleResponse create(@PathVariable String name) {
         return service.addRole(name);
     }
 

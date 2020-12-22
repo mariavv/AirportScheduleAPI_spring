@@ -1,4 +1,4 @@
-package mariavv.airportscheduleapispring.domain.dto;
+package mariavv.airportscheduleapispring.domain.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,7 +9,7 @@ import javax.validation.constraints.Min;
 import java.util.Date;
 
 @Getter
-public final class AirportsAndArrivalIntervalDto {
+public final class AirportsAndArrivalIntervalRequest {
     @Min(0)
     private final Integer airportFromId;
     @Min(0)
@@ -20,10 +20,10 @@ public final class AirportsAndArrivalIntervalDto {
     private final Date arrivalTo;
 
     @JsonCreator
-    public AirportsAndArrivalIntervalDto(@JsonProperty(value = "airportFromId") Integer airportFromId,
-                                         @JsonProperty(value = "airportToId") Integer airportToId,
-                                         @JsonProperty(value = "arrivalFrom") Date arrivalFrom,
-                                         @JsonProperty(value = "arrivalTo") Date arrivalTo) {
+    public AirportsAndArrivalIntervalRequest(@JsonProperty(value = "airportFromId") Integer airportFromId,
+                                             @JsonProperty(value = "airportToId") Integer airportToId,
+                                             @JsonProperty(value = "arrivalFrom") Date arrivalFrom,
+                                             @JsonProperty(value = "arrivalTo") Date arrivalTo) {
         this.airportFromId = airportFromId;
         this.airportToId = airportToId;
         this.ArrivalFrom = arrivalFrom;

@@ -1,7 +1,8 @@
 package mariavv.airportscheduleapispring.mapper;
 
 import mariavv.airportscheduleapispring.domain.dto.FlightDto;
-import mariavv.airportscheduleapispring.domain.dto.FlightWithIdDto;
+import mariavv.airportscheduleapispring.domain.dto.request.FlightRequest;
+import mariavv.airportscheduleapispring.domain.dto.response.FlightWithIdResponse;
 import mariavv.airportscheduleapispring.domain.entity.AirportEntity;
 import mariavv.airportscheduleapispring.domain.entity.FlightEntity;
 import org.mapstruct.Mapper;
@@ -19,17 +20,17 @@ public interface AnotherFlightMapper {
     @Mapping(target = "id", ignore = true),
     @Mapping(target = "airportFrom", expression = "java(airportFrom)"),
     @Mapping(target = "airportTo", expression = "java(airportTo)"),
-    @Mapping(target = "departure", expression = "java(flightDto.getDeparture())"),
-    @Mapping(target = "arrival", expression = "java(flightDto.getArrival())"),
-    @Mapping(target = "delay", expression = "java(flightDto.getDelay())"),
-    @Mapping(target = "delayArrival", expression = "java(flightDto.getDelayArrival())"),
+    @Mapping(target = "departure", expression = "java(flightRequest.getDeparture())"),
+    @Mapping(target = "arrival", expression = "java(flightRequest.getArrival())"),
+    @Mapping(target = "delay", expression = "java(flightRequest.getDelay())"),
+    @Mapping(target = "delayArrival", expression = "java(flightRequest.getDelayArrival())"),
     @Mapping(target = "postponedOn", expression = "java(postponedOn)"),
-    @Mapping(target = "isCanceled", expression = "java(flightDto.getIsCanceled())")
+    @Mapping(target = "isCanceled", expression = "java(flightRequest.getIsCanceled())")
     })
-    FlightEntity toFlightEntity(FlightDto flightDto, AirportEntity airportFrom, AirportEntity airportTo, FlightEntity postponedOn);
+    FlightEntity toFlightEntity(FlightRequest flightRequest, AirportEntity airportFrom, AirportEntity airportTo, FlightEntity postponedOn);
 
     @Mapping(target = "flight", source = "flightEntity")
-    FlightWithIdDto toFlightWithIdDto(FlightEntity flightEntity);
+    FlightWithIdResponse toFlightWithIdDto(FlightEntity flightEntity);
 
     @Mappings({
             @Mapping(target = "airportFromId", expression = "java(flightEntity.getAirportFrom().getId())"),
@@ -38,5 +39,5 @@ public interface AnotherFlightMapper {
     })
     FlightDto toFlightDto(FlightEntity flightEntity);
 
-    List<FlightWithIdDto> toDtoList(List<FlightEntity> entityList);
+    List<FlightWithIdResponse> toDtoList(List<FlightEntity> entityList);
 }

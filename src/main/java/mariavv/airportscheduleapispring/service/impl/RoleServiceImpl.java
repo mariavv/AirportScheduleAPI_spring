@@ -1,13 +1,12 @@
 package mariavv.airportscheduleapispring.service.impl;
 
 import lombok.AllArgsConstructor;
-import mariavv.airportscheduleapispring.domain.dto.RoleDto;
+import mariavv.airportscheduleapispring.domain.dto.response.RoleResponse;
 import mariavv.airportscheduleapispring.domain.entity.PermissionEntity;
 import mariavv.airportscheduleapispring.domain.entity.RoleEntity;
 import mariavv.airportscheduleapispring.repo.PermissionRepository;
 import mariavv.airportscheduleapispring.repo.RoleRepository;
 import mariavv.airportscheduleapispring.service.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,20 +19,20 @@ public class RoleServiceImpl implements RoleService {
     private final PermissionRepository permissionRepository;
 
     @Override
-    public List<RoleDto> getRoles() {
+    public List<RoleResponse> getRoles() {
         return roleRepository.findAll()
                 .stream()
-                .map(role -> new RoleDto(role.getId(), role.getRole()))
+                .map(role -> new RoleResponse(role.getId(), role.getRole()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public RoleDto addRole(String name) {
+    public RoleResponse addRole(String name) {
         RoleEntity role = new RoleEntity();
         role.setRole(name);
         roleRepository.save(role);
 
-        return new RoleDto(role.getId(), role.getRole());
+        return new RoleResponse(role.getId(), role.getRole());
     }
 
     @Override

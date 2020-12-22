@@ -1,10 +1,10 @@
 package mariavv.airportscheduleapispring.controller;
 
 import lombok.AllArgsConstructor;
-import mariavv.airportscheduleapispring.domain.dto.AirportsAndArrivalIntervalDto;
-import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrivalDto;
-import mariavv.airportscheduleapispring.domain.dto.FlightDto;
-import mariavv.airportscheduleapispring.domain.dto.FlightWithIdDto;
+import mariavv.airportscheduleapispring.domain.dto.response.FlightWithIdResponse;
+import mariavv.airportscheduleapispring.domain.dto.request.AirportsAndArrivalIntervalRequest;
+import mariavv.airportscheduleapispring.domain.dto.request.AirportsAndFactArrivalRequest;
+import mariavv.airportscheduleapispring.domain.dto.request.FlightRequest;
 import mariavv.airportscheduleapispring.service.FlightService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +23,13 @@ public class FlightController {
     private final FlightService service;
 
     @GetMapping
-    public List<FlightWithIdDto> flights() {
+    public List<FlightWithIdResponse> flights() {
         return service.getFlights();
     }
 
     @PreAuthorize("hasAuthority('schedule:write')")
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody FlightDto flight) {
+    public ResponseEntity<String> create(@RequestBody FlightRequest flight) {
         if (isEmpty(flight)) {
             return ResponseEntity.badRequest().build();
         }
@@ -61,21 +61,21 @@ public class FlightController {
     }
 
     @GetMapping("/by-airport-and-arrival")
-    public ResponseEntity<List<FlightWithIdDto>> getFlightsByAirportAndArrivalInterval(@RequestBody AirportsAndArrivalIntervalDto target) {
+    public ResponseEntity<List<FlightWithIdResponse>> getFlightsByAirportAndArrivalInterval(@RequestBody AirportsAndArrivalIntervalRequest target) {
         if (isEmpty(target.getAirportFromId()) || isEmpty(target.getAirportToId()) ||
                 isEmpty(target.getArrivalFrom()) || isEmpty(target.getArrivalTo())) {
             return ResponseEntity.badRequest().build();
         }
 
-        List<FlightWithIdDto> result =
+        List<FlightWithIdResponse> result =
                 service.findByAirportFromAndAirportToAndArrivalBetween(target);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/by-airport-and-arrival-delay")
-    public ResponseEntity<List<FlightWithIdDto>> getFlightsByAirportsAndArrivalWithDelays(@RequestBody AirportsAndFactArrivalDto target) {
+    public ResponseEntity<List<FlightWithIdResponse>> getFlightsByAirportsAndArrivalWithDelays(@RequestBody AirportsAndFactArrivalRequest target) {
 
-        List<FlightWithIdDto> result = service.getFlightsByAirportsAndArrivalWithDelays(target);
+        List<FlightWithIdResponse> result = service.getFlightsByAirportsAndArrivalWithDelays(target);
         return ResponseEntity.ok(result);
     }
 }

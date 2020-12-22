@@ -1,9 +1,9 @@
 package mariavv.airportscheduleapispring.controller;
 
 import lombok.AllArgsConstructor;
-import mariavv.airportscheduleapispring.domain.dto.ChangePasswordDto;
-import mariavv.airportscheduleapispring.domain.dto.UserDto;
-import mariavv.airportscheduleapispring.domain.dto.UserPassDto;
+import mariavv.airportscheduleapispring.domain.dto.request.ChangePasswordRequest;
+import mariavv.airportscheduleapispring.domain.dto.request.UserPassRequest;
+import mariavv.airportscheduleapispring.domain.dto.response.UserResponse;
 import mariavv.airportscheduleapispring.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +23,12 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('auth')")
     @GetMapping()
-    public List<UserDto> getUsers() {
+    public List<UserResponse> getUsers() {
         return service.getUsers();
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> create(@RequestBody UserPassDto user) {
+    public ResponseEntity<UserResponse> create(@RequestBody UserPassRequest user) {
         if (isEmpty(user.getName()) || isEmpty(user.getPassword())) {
             return ResponseEntity.badRequest().build();
         }
@@ -43,7 +43,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('schedule:read')")
     @PostMapping("/change_password")
-    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDto pass) {
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest pass) {
         service.changePassword(pass.getName(), pass.getPassword(), pass.getNewPassword());
         return ResponseEntity.ok().build();
     }

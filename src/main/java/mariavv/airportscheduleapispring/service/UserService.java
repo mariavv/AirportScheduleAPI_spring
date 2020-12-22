@@ -1,14 +1,14 @@
 package mariavv.airportscheduleapispring.service;
 
-import mariavv.airportscheduleapispring.domain.dto.UserDto;
-import mariavv.airportscheduleapispring.domain.dto.UserPassDto;
+import mariavv.airportscheduleapispring.domain.dto.request.UserPassRequest;
+import mariavv.airportscheduleapispring.domain.dto.response.UserResponse;
 
 import java.util.List;
 
 public interface UserService {
-    List<UserDto> getUsers();
+    List<UserResponse> getUsers();
 
-    UserDto addUser(UserPassDto newUser);
+    UserResponse addUser(UserPassRequest newUser);
 
     void deleteUser(Integer id);
 

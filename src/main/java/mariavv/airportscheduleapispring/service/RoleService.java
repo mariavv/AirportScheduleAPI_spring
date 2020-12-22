@@ -1,13 +1,13 @@
 package mariavv.airportscheduleapispring.service;
 
-import mariavv.airportscheduleapispring.domain.dto.RoleDto;
+import mariavv.airportscheduleapispring.domain.dto.response.RoleResponse;
 
 import java.util.List;
 
 public interface RoleService {
-    List<RoleDto> getRoles();
+    List<RoleResponse> getRoles();
 
-    RoleDto addRole(String name);
+    RoleResponse addRole(String name);
 
     void deleteRole(Integer id);
 

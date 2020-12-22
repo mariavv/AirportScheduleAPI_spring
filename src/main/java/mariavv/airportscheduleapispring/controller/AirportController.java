@@ -1,7 +1,7 @@
 package mariavv.airportscheduleapispring.controller;
 
 import lombok.AllArgsConstructor;
-import mariavv.airportscheduleapispring.domain.dto.AirportDto;
+import mariavv.airportscheduleapispring.domain.dto.response.AirportResponse;
 import mariavv.airportscheduleapispring.service.AirportService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ public class AirportController {
     private final AirportService service;
 
     @GetMapping()
-    public List<AirportDto> getAirports() {
+    public List<AirportResponse> getAirports() {
         return service.getAirports();
     }
 
@@ -27,7 +27,7 @@ public class AirportController {
 
     @PreAuthorize("hasAuthority('schedule:write')")
     @PostMapping("/{name}")
-    public AirportDto create(@PathVariable String name) {
+    public AirportResponse create(@PathVariable String name) {
         return service.addAirport(name);
     }
 

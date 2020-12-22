@@ -1,10 +1,10 @@
 package mariavv.airportscheduleapispring.service.impl;
 
 import lombok.AllArgsConstructor;
-import mariavv.airportscheduleapispring.domain.dto.AirportsAndArrivalIntervalDto;
-import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrivalDto;
-import mariavv.airportscheduleapispring.domain.dto.FlightDto;
-import mariavv.airportscheduleapispring.domain.dto.FlightWithIdDto;
+import mariavv.airportscheduleapispring.domain.dto.response.FlightWithIdResponse;
+import mariavv.airportscheduleapispring.domain.dto.request.AirportsAndArrivalIntervalRequest;
+import mariavv.airportscheduleapispring.domain.dto.request.AirportsAndFactArrivalRequest;
+import mariavv.airportscheduleapispring.domain.dto.request.FlightRequest;
 import mariavv.airportscheduleapispring.domain.entity.AirportEntity;
 import mariavv.airportscheduleapispring.domain.entity.FlightEntity;
 import mariavv.airportscheduleapispring.mapper.AnotherFlightMapper;
@@ -15,7 +15,6 @@ import mariavv.airportscheduleapispring.service.FlightService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,7 +31,7 @@ public class FlightServiceImpl implements FlightService {
     private final AnotherFlightMapper anotherFlightMapper;
 
     @Override
-    public List<FlightWithIdDto> getFlights() {
+    public List<FlightWithIdResponse> getFlights() {
         return flightRepository.findAll()
                 .stream()
                 .map(anotherFlightMapper::toFlightWithIdDto)
@@ -40,7 +39,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public Boolean createFlight(FlightDto flight) {
+    public Boolean createFlight(FlightRequest flight) {
         Integer postponedOnId = flight.getPostponedOn();
         FlightEntity flightEntity = anotherFlightMapper.toFlightEntity(
                 flight,
@@ -79,7 +78,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public List<FlightWithIdDto> findByAirportFromAndAirportToAndArrivalBetween(AirportsAndArrivalIntervalDto target) {
+    public List<FlightWithIdResponse> findByAirportFromAndAirportToAndArrivalBetween(AirportsAndArrivalIntervalRequest target) {
         Optional<AirportEntity> airportFrom = airportRepository.findById(target.getAirportFromId());
         Optional<AirportEntity> airportTo = airportRepository.findById(target.getAirportToId());
         if (airportFrom.isEmpty() || airportTo.isEmpty()) {
@@ -93,7 +92,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public List<FlightWithIdDto> getFlightsByAirportsAndArrivalWithDelays(AirportsAndFactArrivalDto params) {
+    public List<FlightWithIdResponse> getFlightsByAirportsAndArrivalWithDelays(AirportsAndFactArrivalRequest params) {
         return anotherFlightMapper.toDtoList(flightRepository.getFlightsByAirportsAndArrivalWithDelays(
                 params.getAirportFromId(), params.getAirportToId(), params.getArrivalTo()));
     }

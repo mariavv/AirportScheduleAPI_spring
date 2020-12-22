@@ -1,13 +1,13 @@
 package mariavv.airportscheduleapispring.service;
 
-import mariavv.airportscheduleapispring.domain.dto.PermissionDto;
+import mariavv.airportscheduleapispring.domain.dto.response.PermissionResponse;
 
 import java.util.List;
 
 public interface PermissionService {
-    List<PermissionDto> getPermissions();
+    List<PermissionResponse> getPermissions();
 
-    PermissionDto addPermission(String name);
+    PermissionResponse addPermission(String name);
 
     void deletePermission(Integer id);
 }

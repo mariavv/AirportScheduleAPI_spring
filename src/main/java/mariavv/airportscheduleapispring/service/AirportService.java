@@ -1,15 +1,15 @@
 package mariavv.airportscheduleapispring.service;
 
-import mariavv.airportscheduleapispring.domain.dto.AirportDto;
+import mariavv.airportscheduleapispring.domain.dto.response.AirportResponse;
 
 import java.util.List;
 
 public interface AirportService {
-    List<AirportDto> getAirports();
+    List<AirportResponse> getAirports();
 
     Integer getAirportIdByName(String name);
 
-    AirportDto addAirport(String town);
+    AirportResponse addAirport(String town);
 
     void deleteAirport(Integer id);
 }

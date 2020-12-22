@@ -1,23 +1,22 @@
 package mariavv.airportscheduleapispring.service;
 
-import mariavv.airportscheduleapispring.domain.dto.AirportsAndArrivalIntervalDto;
-import mariavv.airportscheduleapispring.domain.dto.AirportsAndFactArrivalDto;
-import mariavv.airportscheduleapispring.domain.dto.FlightDto;
-import mariavv.airportscheduleapispring.domain.dto.FlightWithIdDto;
+import mariavv.airportscheduleapispring.domain.dto.request.AirportsAndArrivalIntervalRequest;
+import mariavv.airportscheduleapispring.domain.dto.request.AirportsAndFactArrivalRequest;
+import mariavv.airportscheduleapispring.domain.dto.request.FlightRequest;
+import mariavv.airportscheduleapispring.domain.dto.response.FlightWithIdResponse;
 
-import java.util.Date;
 import java.util.List;
 
 public interface FlightService {
-    List<FlightWithIdDto> getFlights();
+    List<FlightWithIdResponse> getFlights();
 
-    Boolean createFlight(FlightDto flight);
+    Boolean createFlight(FlightRequest flight);
 
     void deleteFlight(Integer id);
 
     Boolean updateIsCanceled(Integer id, Boolean isCancelled);
 
-    List<FlightWithIdDto> findByAirportFromAndAirportToAndArrivalBetween(AirportsAndArrivalIntervalDto target);
+    List<FlightWithIdResponse> findByAirportFromAndAirportToAndArrivalBetween(AirportsAndArrivalIntervalRequest target);
 
-    List<FlightWithIdDto> getFlightsByAirportsAndArrivalWithDelays(AirportsAndFactArrivalDto factArrival);
+    List<FlightWithIdResponse> getFlightsByAirportsAndArrivalWithDelays(AirportsAndFactArrivalRequest factArrival);
 }
