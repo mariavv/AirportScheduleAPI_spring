@@ -20,7 +20,7 @@ public class BaseExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    protected ResponseEntity<ErrorInfoResponse> handleIllegalArgumentException() {
+    protected ResponseEntity<ErrorInfoResponse> handleIllegalArgumentException(Exception ex) {
         return new ResponseEntity<>(new ErrorInfoResponse("Operation not performed"),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }

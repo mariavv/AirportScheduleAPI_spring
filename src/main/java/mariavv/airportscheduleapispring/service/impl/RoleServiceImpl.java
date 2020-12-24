@@ -8,6 +8,7 @@ import mariavv.airportscheduleapispring.repo.PermissionRepository;
 import mariavv.airportscheduleapispring.repo.RoleRepository;
 import mariavv.airportscheduleapispring.service.RoleService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<RoleResponse> getRoles() {
         return roleRepository.findAll()

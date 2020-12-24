@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
@@ -29,7 +30,7 @@ public class FlightController {
 
     @PreAuthorize("hasAuthority('schedule:write')")
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody FlightRequest flight) {
+    public ResponseEntity<String> create(@Valid @RequestBody FlightRequest flight) {
         if (isEmpty(flight)) {
             return ResponseEntity.badRequest().build();
         }
@@ -42,10 +43,10 @@ public class FlightController {
     }
 
     @PreAuthorize("hasAuthority('schedule:write')")
-    @PutMapping
-    public ResponseEntity<String> update(@RequestParam Integer id,
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(@PathVariable Integer id,
                                          @RequestParam Boolean isCanceled) {
-        if (isEmpty(id) || isEmpty(isCanceled)) {
+        if (isEmpty(isCanceled)) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -62,20 +63,16 @@ public class FlightController {
 
     @GetMapping("/by-airport-and-arrival")
     public ResponseEntity<List<FlightWithIdResponse>> getFlightsByAirportAndArrivalInterval(@RequestBody AirportsAndArrivalIntervalRequest target) {
-        if (isEmpty(target.getAirportFromId()) || isEmpty(target.getAirportToId()) ||
+        /*if (isEmpty(target.getAirportFromId()) || isEmpty(target.getAirportToId()) ||
                 isEmpty(target.getArrivalFrom()) || isEmpty(target.getArrivalTo())) {
             return ResponseEntity.badRequest().build();
-        }
+        }*/
 
-        List<FlightWithIdResponse> result =
-                service.findByAirportFromAndAirportToAndArrivalBetween(target);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(service.findByAirportFromAndAirportToAndArrivalBetween(target));
     }
 
     @GetMapping("/by-airport-and-arrival-delay")
     public ResponseEntity<List<FlightWithIdResponse>> getFlightsByAirportsAndArrivalWithDelays(@RequestBody AirportsAndFactArrivalRequest target) {
-
-        List<FlightWithIdResponse> result = service.getFlightsByAirportsAndArrivalWithDelays(target);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(service.getFlightsByAirportsAndArrivalWithDelays(target));
     }
 }

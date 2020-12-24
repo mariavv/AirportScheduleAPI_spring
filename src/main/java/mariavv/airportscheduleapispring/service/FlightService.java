@@ -14,7 +14,7 @@ public interface FlightService {
 
     void deleteFlight(Integer id);
 
-    Boolean updateIsCanceled(Integer id, Boolean isCancelled);
+    void updateIsCanceled(Integer id, Boolean isCancelled);
 
     List<FlightWithIdResponse> findByAirportFromAndAirportToAndArrivalBetween(AirportsAndArrivalIntervalRequest target);
 
