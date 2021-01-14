@@ -7,6 +7,7 @@ import mariavv.airportscheduleapispring.exception.NotFoundException;
 import mariavv.airportscheduleapispring.repo.AirportRepository;
 import mariavv.airportscheduleapispring.service.AirportService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class AirportServiceImpl implements AirportService {
     private final AirportRepository airportRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<AirportResponse> getAirports() {
         return airportRepository.findAll()
@@ -24,6 +26,7 @@ public class AirportServiceImpl implements AirportService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Integer getAirportIdByName(String name) {
         AirportEntity airport = airportRepository.findByName(name);

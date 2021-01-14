@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -20,36 +22,33 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @AllArgsConstructor
 public class FlightController {
 
-    private final FlightService service;
+    private final FlightService flightService;
 
     @GetMapping
     public List<FlightWithIdResponse> flights() {
-        return service.getFlights();
+        return flightService.getFlights();
     }
 
     @PreAuthorize("hasAuthority('schedule:write')")
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody FlightRequest flight) {
+    public ResponseEntity<String> create(@Valid @RequestBody FlightRequest flight) {
         if (isEmpty(flight)) {
             return ResponseEntity.badRequest().build();
         }
 
-        if (service.createFlight(flight)) {
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        flightService.createFlight(flight);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PreAuthorize("hasAuthority('schedule:write')")
-    @PutMapping
-    public ResponseEntity<String> update(@RequestParam Integer id,
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(@PathVariable Integer id,
                                          @RequestParam Boolean isCanceled) {
-        if (isEmpty(id) || isEmpty(isCanceled)) {
+        if (isEmpty(isCanceled)) {
             return ResponseEntity.badRequest().build();
         }
 
-        service.updateIsCanceled(id, isCanceled);
+        flightService.updateIsCanceled(id, isCanceled);
 
         return ResponseEntity.ok().build();
     }
@@ -57,25 +56,21 @@ public class FlightController {
     @PreAuthorize("hasAuthority('schedule:write')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
-        service.deleteFlight(id);
+        flightService.deleteFlight(id);
     }
 
     @GetMapping("/by-airport-and-arrival")
     public ResponseEntity<List<FlightWithIdResponse>> getFlightsByAirportAndArrivalInterval(@RequestBody AirportsAndArrivalIntervalRequest target) {
-        if (isEmpty(target.getAirportFromId()) || isEmpty(target.getAirportToId()) ||
-                isEmpty(target.getArrivalFrom()) || isEmpty(target.getArrivalTo())) {
-            return ResponseEntity.badRequest().build();
+        Optional<List<FlightWithIdResponse>> result = flightService.findByAirportFromAndAirportToAndArrivalBetween(target);
+        if (result.isPresent()) {
+            return ResponseEntity.ok(result.get());
+        } else {
+            return ResponseEntity.noContent().build();
         }
-
-        List<FlightWithIdResponse> result =
-                service.findByAirportFromAndAirportToAndArrivalBetween(target);
-        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/by-airport-and-arrival-delay")
     public ResponseEntity<List<FlightWithIdResponse>> getFlightsByAirportsAndArrivalWithDelays(@RequestBody AirportsAndFactArrivalRequest target) {
-
-        List<FlightWithIdResponse> result = service.getFlightsByAirportsAndArrivalWithDelays(target);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(flightService.getFlightsByAirportsAndArrivalWithDelays(target));
     }
 }

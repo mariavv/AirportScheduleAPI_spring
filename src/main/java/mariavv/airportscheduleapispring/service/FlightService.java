@@ -6,17 +6,18 @@ import mariavv.airportscheduleapispring.domain.dto.request.FlightRequest;
 import mariavv.airportscheduleapispring.domain.dto.response.FlightWithIdResponse;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FlightService {
     List<FlightWithIdResponse> getFlights();
 
-    Boolean createFlight(FlightRequest flight);
+    void createFlight(FlightRequest flight);
 
     void deleteFlight(Integer id);
 
-    Boolean updateIsCanceled(Integer id, Boolean isCancelled);
+    void updateIsCanceled(Integer id, Boolean isCancelled);
 
-    List<FlightWithIdResponse> findByAirportFromAndAirportToAndArrivalBetween(AirportsAndArrivalIntervalRequest target);
+    Optional<List<FlightWithIdResponse>> findByAirportFromAndAirportToAndArrivalBetween(AirportsAndArrivalIntervalRequest target);
 
     List<FlightWithIdResponse> getFlightsByAirportsAndArrivalWithDelays(AirportsAndFactArrivalRequest factArrival);
 }

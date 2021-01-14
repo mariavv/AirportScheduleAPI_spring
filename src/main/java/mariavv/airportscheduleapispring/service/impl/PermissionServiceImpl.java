@@ -6,6 +6,7 @@ import mariavv.airportscheduleapispring.domain.entity.PermissionEntity;
 import mariavv.airportscheduleapispring.repo.PermissionRepository;
 import mariavv.airportscheduleapispring.service.PermissionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     private final PermissionRepository permissionRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<PermissionResponse> getPermissions() {
         return permissionRepository.findAll()

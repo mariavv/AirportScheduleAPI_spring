@@ -1,25 +1,25 @@
 package mariavv.airportscheduleapispring.service.impl;
 
 import lombok.AllArgsConstructor;
-import mariavv.airportscheduleapispring.domain.dto.response.FlightWithIdResponse;
 import mariavv.airportscheduleapispring.domain.dto.request.AirportsAndArrivalIntervalRequest;
 import mariavv.airportscheduleapispring.domain.dto.request.AirportsAndFactArrivalRequest;
 import mariavv.airportscheduleapispring.domain.dto.request.FlightRequest;
+import mariavv.airportscheduleapispring.domain.dto.response.FlightWithIdResponse;
 import mariavv.airportscheduleapispring.domain.entity.AirportEntity;
 import mariavv.airportscheduleapispring.domain.entity.FlightEntity;
+import mariavv.airportscheduleapispring.exception.NotFoundException;
 import mariavv.airportscheduleapispring.mapper.AnotherFlightMapper;
 import mariavv.airportscheduleapispring.mapper.FlightMapper;
 import mariavv.airportscheduleapispring.repo.AirportRepository;
 import mariavv.airportscheduleapispring.repo.FlightRepository;
 import mariavv.airportscheduleapispring.service.FlightService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +30,7 @@ public class FlightServiceImpl implements FlightService {
     private final FlightMapper flightMapper;
     private final AnotherFlightMapper anotherFlightMapper;
 
+    @Transactional(readOnly = true)
     @Override
     public List<FlightWithIdResponse> getFlights() {
         return flightRepository.findAll()
@@ -39,7 +40,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public Boolean createFlight(FlightRequest flight) {
+    public void createFlight(FlightRequest flight) {
         Integer postponedOnId = flight.getPostponedOn();
         FlightEntity flightEntity = anotherFlightMapper.toFlightEntity(
                 flight,
@@ -48,12 +49,7 @@ public class FlightServiceImpl implements FlightService {
                 postponedOnId == null ? null : flightRepository.findById(postponedOnId).orElse(null)
         );
 
-        try {
-            flightRepository.save(flightEntity);
-            return true;
-        } catch (IllegalArgumentException ex) {
-            return false;
-        }
+        flightRepository.save(flightEntity);
     }
 
     @Override
@@ -62,38 +58,59 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public Boolean updateIsCanceled(Integer id, Boolean isCancelled) {
-        FlightEntity flight = flightRepository.findById(id).orElse(null);
+    public void updateIsCanceled(Integer id, Boolean isCancelled) {
+        FlightEntity flight = flightRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Flight with id = %d not found", id)));
 
-        if (!isEmpty(flight)) {
-            flight.setIsCanceled(isCancelled);
-            try {
-                flightRepository.save(flight);
-                return true;
-            } catch (IllegalArgumentException ex) {
-                return false;
-            }
-        }
-        return false;
+        flight.setIsCanceled(isCancelled);
+        flightRepository.save(flight);
     }
 
+    AirportEntity getIt(Integer id) {
+        return airportRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(String.format("Airport with id = %d not found", id))
+        );
+    }
+
+    @Transactional(readOnly = true)
     @Override
-    public List<FlightWithIdResponse> findByAirportFromAndAirportToAndArrivalBetween(AirportsAndArrivalIntervalRequest target) {
-        Optional<AirportEntity> airportFrom = airportRepository.findById(target.getAirportFromId());
-        Optional<AirportEntity> airportTo = airportRepository.findById(target.getAirportToId());
+    public Optional<List<FlightWithIdResponse>> findByAirportFromAndAirportToAndArrivalBetween(AirportsAndArrivalIntervalRequest params) {
+        Optional<AirportEntity> airportFrom = airportRepository.findById(params.getAirportFromId());
+
+        Optional<AirportEntity> airportTo = airportRepository.findById(params.getAirportToId());
+
         if (airportFrom.isEmpty() || airportTo.isEmpty()) {
-            return new ArrayList<>();
+            return Optional.of(null);
         }
 
-        List<FlightEntity> flights = flightRepository
-                .findByAirportFromAndAirportToAndArrivalBetween(airportFrom.get(), airportTo.get(), target.getArrivalFrom(), target.getArrivalTo());
+        //Assert.notNull(params.getArrivalFrom(), "arrivalFrom date must not be null");
+        //Assert.notNull(params.getArrivalTo(), "arrivalTo date must not be null");
 
-        return anotherFlightMapper.toDtoList(flights);
+        List<FlightEntity> flights = flightRepository.findByAirportFromAndAirportToAndArrivalBetween(
+                airportFrom,
+                airportTo,
+                params.getArrivalFrom(),
+                params.getArrivalTo()
+        );
+
+        return Optional.of(anotherFlightMapper.toDtoList(flights));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<FlightWithIdResponse> getFlightsByAirportsAndArrivalWithDelays(AirportsAndFactArrivalRequest params) {
+        airportRepository.findById(params.getAirportFromId())
+                .orElseThrow(() -> new NotFoundException(String.format("Airport with id = %d not found", params.getAirportFromId())));
+        airportRepository.findById(params.getAirportToId())
+                .orElseThrow(() -> new NotFoundException(String.format("Airport with id = %d not found", params.getAirportToId())));
+
         return anotherFlightMapper.toDtoList(flightRepository.getFlightsByAirportsAndArrivalWithDelays(
                 params.getAirportFromId(), params.getAirportToId(), params.getArrivalTo()));
     }
+
+    /*private AirportEntity getArportById(Integer id) {
+        return airportRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Airport with id = %d not found", params.getAirportFromId()));
+    }*/
 }

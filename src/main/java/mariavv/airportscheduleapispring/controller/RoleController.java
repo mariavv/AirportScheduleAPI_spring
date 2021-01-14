@@ -17,24 +17,24 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @AllArgsConstructor
 public class RoleController {
 
-    private final RoleService service;
+    private final RoleService roleService;
 
     @PreAuthorize("hasAuthority('auth')")
     @GetMapping
     public List<RoleResponse> getRoles() {
-        return service.getRoles();
+        return roleService.getRoles();
     }
 
     @PreAuthorize("hasAuthority('auth')")
     @PostMapping("/{name}")
     public RoleResponse create(@PathVariable String name) {
-        return service.addRole(name);
+        return roleService.addRole(name);
     }
 
     @PreAuthorize("hasAuthority('auth')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
-        service.deleteRole(id);
+        roleService.deleteRole(id);
     }
 
     @PreAuthorize("hasAuthority('auth')")
@@ -44,7 +44,7 @@ public class RoleController {
             return ResponseEntity.badRequest().build();
         }
 
-        if (service.grantPermission(roleId, permissionId)) {
+        if (roleService.grantPermission(roleId, permissionId)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

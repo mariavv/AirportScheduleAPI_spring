@@ -19,12 +19,12 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserService service;
+    private final UserService userService;
 
     @PreAuthorize("hasAuthority('auth')")
     @GetMapping()
     public List<UserResponse> getUsers() {
-        return service.getUsers();
+        return userService.getUsers();
     }
 
     @PostMapping
@@ -32,19 +32,19 @@ public class UserController {
         if (isEmpty(user.getName()) || isEmpty(user.getPassword())) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok().body(service.addUser(user));
+        return ResponseEntity.ok().body(userService.addUser(user));
     }
 
     @PreAuthorize("hasAuthority('auth')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
-        service.deleteUser(id);
+        userService.deleteUser(id);
     }
 
     @PreAuthorize("hasAuthority('schedule:read')")
     @PostMapping("/change_password")
     public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest pass) {
-        service.changePassword(pass.getName(), pass.getPassword(), pass.getNewPassword());
+        userService.changePassword(pass.getName(), pass.getPassword(), pass.getNewPassword());
         return ResponseEntity.ok().build();
     }
 
@@ -56,7 +56,7 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
 
-        if (service.grantRole(userId, roleId)) {
+        if (userService.grantRole(userId, roleId)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

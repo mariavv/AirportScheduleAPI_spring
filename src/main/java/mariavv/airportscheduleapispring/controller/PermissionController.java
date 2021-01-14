@@ -13,23 +13,23 @@ import java.util.List;
 @AllArgsConstructor
 public class PermissionController {
 
-    private final PermissionService service;
+    private final PermissionService permissionService;
 
     @PreAuthorize("hasAuthority('auth')")
     @GetMapping()
     public List<PermissionResponse> getPermissionss() {
-        return service.getPermissions();
+        return permissionService.getPermissions();
     }
 
     @PreAuthorize("hasAuthority('auth')")
     @PostMapping("/{name}")
     public PermissionResponse create(@PathVariable String name) {
-        return service.addPermission(name);
+        return permissionService.addPermission(name);
     }
 
     @PreAuthorize("hasAuthority('auth')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
-        service.deletePermission(id);
+        permissionService.deletePermission(id);
     }
 }

@@ -13,27 +13,27 @@ import java.util.List;
 @AllArgsConstructor
 public class AirportController {
 
-    private final AirportService service;
+    private final AirportService airportService;
 
     @GetMapping()
     public List<AirportResponse> getAirports() {
-        return service.getAirports();
+        return airportService.getAirports();
     }
 
     @GetMapping("/{name}")
     public Integer getOne(@PathVariable String name) {
-        return service.getAirportIdByName(name);
+        return airportService.getAirportIdByName(name);
     }
 
     @PreAuthorize("hasAuthority('schedule:write')")
     @PostMapping("/{name}")
     public AirportResponse create(@PathVariable String name) {
-        return service.addAirport(name);
+        return airportService.addAirport(name);
     }
 
     @PreAuthorize("hasAuthority('schedule:write')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
-        service.deleteAirport(id);
+        airportService.deleteAirport(id);
     }
 }
