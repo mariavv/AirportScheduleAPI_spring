@@ -15,7 +15,6 @@ import mariavv.airportscheduleapispring.repo.FlightRepository;
 import mariavv.airportscheduleapispring.service.FlightService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
